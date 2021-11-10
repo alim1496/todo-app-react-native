@@ -29,36 +29,47 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import TaskItem from './TaskItem';
 
-const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2' };
+export const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2' };
 
 const App = () => {
   const [tasks, setTasks] = useState([
     {
+      id: 1,
       title: 'Do the math',
       time: '10/11/2021 5:30PM',
       completed: false,
     },
     {
+      id: 2,
       title: 'Solve the puzzle',
       time: '10/11/2021 4:30PM',
       completed: true,
     },
     {
+      id: 3,
       title: 'Do the math',
       time: '11/11/2021 3:30PM',
       completed: false,
     },
     {
+      id: 4,
       title: 'Go to play',
       time: '10/11/2021 1:30PM',
       completed: true,
     },
     {
+      id: 5,
       title: 'Eat lunch',
       time: '10/11/2021 1:15PM',
       completed: true,
     },
   ]);
+
+  const deleteTask = (id) => {
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
+  };
+
   return (
     <SafeAreaView style={styles.background}>
       <View style={styles.header}>
@@ -68,9 +79,8 @@ const App = () => {
         </TouchableOpacity>
       </View>
       <FlatList
-        style={{flex: 1}} 
         data={tasks} 
-        renderItem={({item}) => ( <TaskItem task={item} />)} 
+        renderItem={({item}) => ( <TaskItem task={item} onDelete={deleteTask} />)} 
         />
     </SafeAreaView>
   );
