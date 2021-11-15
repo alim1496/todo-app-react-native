@@ -28,10 +28,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import TaskItem from './TaskItem';
+import TaskModal from './TaskModal';
 
 export const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2' };
 
 const App = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -72,9 +74,10 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.background}>
+      <TaskModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       <View style={styles.header}>
         <Text style={styles.headerText}>TODO APP</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalOpen(true)}>
           <Icon name="pluscircle" size={30} color={COLORS.blue} />
         </TouchableOpacity>
       </View>
