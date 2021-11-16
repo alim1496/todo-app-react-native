@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'reac
 import Icon from 'react-native-vector-icons/AntDesign';
 import { COLORS } from './App';
 
-const TaskModal = ({ isOpen, onClose }) => {
+const ConfirmDelete = ({ isOpen, onClose, onDelete }) => {
     return (
         <Modal
             visible={isOpen}
@@ -12,16 +12,13 @@ const TaskModal = ({ isOpen, onClose }) => {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <TextInput
-                        placeholder="Add a task title"
-                        style={styles.input}
-                    />
+                    <Text style={styles.content}>Are you sure you want to delete this task from your task list?</Text>
                     <View style={styles.actionHolder}>
-                        <TouchableOpacity onPress={onClose}>
-                            <Icon name="checkcircleo" size={30} color={COLORS.blue} />
+                        <TouchableOpacity onPress={onDelete}>
+                            <Icon name="checkcircleo" size={30} color={COLORS.red} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose}>
-                            <Icon name="closecircleo" size={30} color={COLORS.red} />
+                            <Icon name="closecircleo" size={30} color={COLORS.blue} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -39,7 +36,7 @@ const styles = StyleSheet.create({
       modalView: {
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 16,
+        padding: 20,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -50,13 +47,12 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
       },
-      input: {
-        height: 40,
-        width: 250,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 6,
+      content: {
+          width: 200,
+          textAlign: 'center',
+          marginBottom: 10,
+          color: '#1f1b1b',
+          fontSize: 16,
       },
       actionHolder: {
           flexDirection: 'row',
@@ -65,4 +61,4 @@ const styles = StyleSheet.create({
       }
 });
 
-export default TaskModal;
+export default ConfirmDelete;

@@ -29,11 +29,14 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import TaskItem from './TaskItem';
 import TaskModal from './TaskModal';
+import ConfirmDelete from './ConfirmDelete';
 
-export const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2' };
+export const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2', red: '#e3360b', fadeBlue: '#c7d2f2' };
 
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState(0);
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -67,14 +70,30 @@ const App = () => {
     },
   ]);
 
-  const deleteTask = (id) => {
-    const newTasks = tasks.filter((task) => task.id !== id);
+  const openConfirmModal = (id) => {
+    setConfirmOpen(true);
+    setDeleteTaskId(id);
+  }
+
+  const deleteTask = () => {
+    const newTasks = tasks.filter((task) => task.id !== deleteTaskId);
     setTasks(newTasks);
+    setDeleteTaskId(0);
+    setConfirmOpen(false);
+  };
+
+  const checkTask = (id) => {
+    const newTasks = [...tasks];
+    const _tasks = newTasks.map((task) => (
+      task.id === id ? {...task, completed: !task.completed} : task
+    ));
+    setTasks(_tasks);
   };
 
   return (
     <SafeAreaView style={styles.background}>
       <TaskModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ConfirmDelete isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} onDelete={deleteTask} />
       <View style={styles.header}>
         <Text style={styles.headerText}>TODO APP</Text>
         <TouchableOpacity onPress={() => setModalOpen(true)}>
@@ -83,7 +102,7 @@ const App = () => {
       </View>
       <FlatList
         data={tasks} 
-        renderItem={({item}) => ( <TaskItem task={item} onDelete={deleteTask} />)} 
+        renderItem={({item}) => ( <TaskItem task={item} onDelete={openConfirmModal} onCheck={checkTask} />)} 
         />
     </SafeAreaView>
   );
