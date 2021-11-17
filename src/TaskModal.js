@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { COLORS } from './App';
 
-const TaskModal = ({ isOpen, onClose }) => {
+const TaskModal = ({ isOpen, onClose, onSuccess }) => {
+    const [title, setTitle] = useState('');
+
+    const addData = (title) => {
+        if(title) {
+            onSuccess(title);
+            setTitle('');
+        }
+    };
+
+    const closeModal = () => {
+        onClose();
+        setTitle('');
+    };
+
     return (
         <Modal
             visible={isOpen}
@@ -13,14 +27,17 @@ const TaskModal = ({ isOpen, onClose }) => {
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <TextInput
-                        placeholder="Add a task title"
+                        placeholder="Add a task"
                         style={styles.input}
+                        value={title}
+                        onChangeText={(value) => setTitle(value)}
                     />
                     <View style={styles.actionHolder}>
-                        <TouchableOpacity onPress={onClose}>
+                        <TouchableOpacity
+                            onPress={() => addData(title)}>
                             <Icon name="checkcircleo" size={30} color={COLORS.blue} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onClose}>
+                        <TouchableOpacity onPress={closeModal}>
                             <Icon name="closecircleo" size={30} color={COLORS.red} />
                         </TouchableOpacity>
                     </View>

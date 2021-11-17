@@ -37,38 +37,7 @@ const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState(0);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: 'Do the math',
-      time: '10/11/2021 5:30PM',
-      completed: false,
-    },
-    {
-      id: 2,
-      title: 'Solve the puzzle',
-      time: '10/11/2021 4:30PM',
-      completed: true,
-    },
-    {
-      id: 3,
-      title: 'Do the math',
-      time: '11/11/2021 3:30PM',
-      completed: false,
-    },
-    {
-      id: 4,
-      title: 'Go to play',
-      time: '10/11/2021 1:30PM',
-      completed: true,
-    },
-    {
-      id: 5,
-      title: 'Eat lunch',
-      time: '10/11/2021 1:15PM',
-      completed: true,
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   const openConfirmModal = (id) => {
     setConfirmOpen(true);
@@ -90,9 +59,20 @@ const App = () => {
     setTasks(_tasks);
   };
 
+  const addTask = (title) => {
+    const task = {
+      id: new Date().getTime(),
+      title,
+      time: '10/11/2021 1:15PM',
+      completed: false,
+    };
+    setTasks(prevTasks => ([task, ...prevTasks]));
+    setModalOpen(false);
+  };
+
   return (
     <SafeAreaView style={styles.background}>
-      <TaskModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <TaskModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSuccess={addTask} />
       <ConfirmDelete isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} onDelete={deleteTask} />
       <View style={styles.header}>
         <Text style={styles.headerText}>TODO APP</Text>
