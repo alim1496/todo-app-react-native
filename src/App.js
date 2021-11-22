@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   FlatList,
@@ -59,11 +51,11 @@ const App = () => {
     setTasks(_tasks);
   };
 
-  const addTask = (title) => {
+  const addTask = (title, date) => {
     const task = {
       id: new Date().getTime(),
       title,
-      time: '10/11/2021 1:15PM',
+      time: date,
       completed: false,
     };
     setTasks(prevTasks => ([task, ...prevTasks]));

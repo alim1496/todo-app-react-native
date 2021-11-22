@@ -10,44 +10,30 @@ const TaskItem = ({ task, onDelete, onCheck }) => (
                 <Text style={{...styles.itemText, ...styles.largeText}}>{task.title}</Text>
                 <Text style={{...styles.itemText, ...styles.smallText}}>{task.time}</Text>
             </View>
-            {task.completed && <Icon name="checkcircle" size={20} color={COLORS.blue} />}
-        </View>
-        <View style={styles.actionHolder}>
-            <TouchableOpacity style={styles.actionItem}>
-                <Icon name="edit" size={14} color={COLORS.main} />
-                <Text style={{...styles.spaced, color: COLORS.main}}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionItem} onPress={() => onDelete(task.id)}>
-                <Icon name="delete" size={14} color={COLORS.red} />
-                <Text style={{...styles.spaced, color: COLORS.red}}>Delete</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionItem} onPress={() => onCheck(task.id)}>
-                <Icon name="check" size={14} color={task.completed ? '#c7d2f2' : '#2b5fed'} />
-                <Text style={[styles.spaced, task.completed ? styles.fadeBlueText : styles.blueText]}>Check</Text>
-            </TouchableOpacity>
+            <View style={styles.actionHolder}>
+                <TouchableOpacity onPress={() => onDelete(task.id)}>
+                    <Icon name="delete" size={18} color={COLORS.red} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.spaced} onPress={() => onCheck(task.id)}>
+                    <Icon name={task.completed ? `checkcircle` : `checkcircleo`} size={18} color="#2b5fed" />
+                </TouchableOpacity>
+            </View>
         </View>
     </View>
 );
 
 const styles = StyleSheet.create({
-    spaced: {
-        marginStart: 5,
-    },
-    actionItem: {
+    actionHolder: {
         flexDirection: 'row',
-        alignItems: 'center',
+    },
+    spaced: {
+        marginStart: 16,
+        marginEnd: 4,
     },
     parentHolder: {
         padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#fff',
-    },
-    actionHolder: {
-        marginTop: 14,
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
     },
     mainHolder: {
         flexDirection: 'row',

@@ -5,10 +5,12 @@ import { COLORS } from './App';
 
 const TaskModal = ({ isOpen, onClose, onSuccess }) => {
     const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
 
-    const addData = (title) => {
-        if(title) {
-            onSuccess(title);
+    const addData = () => {
+        if(title && date) {
+            onSuccess(title, date);
+            setDate('');
             setTitle('');
         }
     };
@@ -16,6 +18,7 @@ const TaskModal = ({ isOpen, onClose, onSuccess }) => {
     const closeModal = () => {
         onClose();
         setTitle('');
+        setDate('');
     };
 
     return (
@@ -32,9 +35,15 @@ const TaskModal = ({ isOpen, onClose, onSuccess }) => {
                         value={title}
                         onChangeText={(value) => setTitle(value)}
                     />
+                    <TextInput
+                        placeholder="dd-mm-yyyy hh:mm"
+                        style={styles.input}
+                        value={date}
+                        onChangeText={(value) => setDate(value)}
+                    />
                     <View style={styles.actionHolder}>
                         <TouchableOpacity
-                            onPress={() => addData(title)}>
+                            onPress={addData}>
                             <Icon name="checkcircleo" size={30} color={COLORS.blue} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={closeModal}>
