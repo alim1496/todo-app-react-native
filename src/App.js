@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { openDatabase } from 'react-native-sqlite-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   FlatList,
   SafeAreaView,
@@ -26,9 +26,6 @@ import ConfirmDelete from './ConfirmDelete';
 
 export const COLORS = { white: '#fff', main: '#1f1b1b', blue: '#2b5fed', grey: '#f2f2f2', red: '#e3360b', fadeBlue: '#c7d2f2' };
 
-const db = openDatabase({
-  name: "tasks_db"
-});
 
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,8 +33,16 @@ const App = () => {
   const [deleteTaskId, setDeleteTaskId] = useState(0);
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
-    createTable();
+  useEffect(async () => {
+    const jsonValue = await AsyncStorage.getItem('@storage_Key');
+    const _t = jsonValue !== null ? JSON.parse(jsonValue) : null;
+    if (_t !== null) {
+      setTasks(_t);
+    }
+    return () => {
+      const _jsonValue = JSON.stringify(tasks);
+      AsyncStorage.setItem('@storage_Key', _jsonValue);
+    };
   }, []);
 
   const openConfirmModal = (id) => {
@@ -60,21 +65,6 @@ const App = () => {
     setTasks(_tasks);
   };
 
-  const createTable = () => {
-    db.transaction(txn => {
-      txn.executeSql(
-        "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, time TIMESTAMP, completed BOOLEAN NOT NULL CHECK (completed IN (0, 1)))",
-        [],
-        () => {
-          console.log("table created successfully");
-        },
-        (error) => {
-          console.log("error is " + error.message);
-        }
-      );
-    });
-  };
-
   const addTask = (title, date) => {
     const task = {
       id: new Date().getTime(),
@@ -85,29 +75,6 @@ const App = () => {
     setTasks(prevTasks => ([task, ...prevTasks]));
     setModalOpen(false);
   };
-
-  const storeData = async () => {
-    // try {
-    //   const jsonValue = JSON.stringify(tasks);
-    //   await AsyncStorage.setItem('@storage_Key', jsonValue);
-    // } catch (e) {
-    //   // saving error
-    // }
-  };
-
-  
-const getData = async () => {
-  // try {
-  //   const jsonValue = await AsyncStorage.getItem('@storage_Key');
-  //   const _t = jsonValue !== null ? JSON.parse(jsonValue) : null;
-  //   if (_t !== null) {
-  //     setTasks(_t);
-  //   }
-  // } catch(e) {
-  //   // error reading value
-  // }
-}
-
 
   return (
     <SafeAreaView style={styles.background}>
