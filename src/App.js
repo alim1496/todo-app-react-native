@@ -33,17 +33,26 @@ const App = () => {
   const [deleteTaskId, setDeleteTaskId] = useState(0);
   const [tasks, setTasks] = useState([]);
 
-  useEffect(async () => {
-    const jsonValue = await AsyncStorage.getItem('@storage_Key');
-    const _t = jsonValue !== null ? JSON.parse(jsonValue) : null;
-    if (_t !== null) {
-      setTasks(_t);
+  useEffect(() => {
+    if (tasks.length !== 0) {
+      AsyncStorage.setItem('todos', JSON.stringify(tasks));
     }
-    return () => {
-      const _jsonValue = JSON.stringify(tasks);
-      AsyncStorage.setItem('@storage_Key', _jsonValue);
-    };
+  }, [tasks]);
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const todos = await AsyncStorage.getItem('todos');
+      if (todos != null) {
+        setTasks(JSON.parse(todos));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const openConfirmModal = (id) => {
     setConfirmOpen(true);
